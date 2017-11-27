@@ -1,0 +1,1 @@
+Magalel-jQuery-Plugin
