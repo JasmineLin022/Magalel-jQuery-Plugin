@@ -28,16 +28,23 @@
 	Module.prototype.open = function(){//打開 新增Class 'opened'
 		console.log('open');
 		this.option.addClass('opened');
+		this.option.removeClass('closed');
 	};
 
 	Module.prototype.close = function(){//收合 新增Class 'closed'
-		console.log('close');
-		this.options.addClass('close');
+		console.log('closed');
+		this.option.addClass('closed');
+		this.option.removeClass('opened');
 	};
 
 	Module.prototype.toggle = function(){
 		console.log('toggle');
+
 	};
+
+	Module.prototype.transiton = function(){
+		this.option.css('transition','3s');
+	}
 
 	Module.prototype.init = function(){
 
