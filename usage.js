@@ -29,32 +29,32 @@
 	};
 
 	Module.prototype.transition = function(i){
-		console.log('transition');
+		// console.log('transition');
 		var tran = this;
 		$('.banner').on('transitionend',function(){
 			// console.log('transitionend');
-			console.log(i);
+			// console.log(i);
 			if(i=='closed'){
-				tran.open();
+				tran.opening();
 			}else{
-				tran.close();
+				tran.closing();
 			}
 		});
 	}
 
-	Module.prototype.open = function(){//打開 新增Class 'opened'
-		console.log('open');
+	Module.prototype.opening = function(){//打開 新增Class 'opened'
+		// console.log('open');
+		
 		$('.banner').addClass(this.option.class.opened);
 		$('.banner').removeClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.closed);
 		$('.banner').removeClass(this.option.class.closing);
 		$('.img').removeClass('bottom');
 		
-		
 	};
 
-	Module.prototype.opening=function(){
-		console.log('opening');
+	Module.prototype.open=function(){
+		// console.log('opening');
 		$('.img').removeClass('bottom');
 		$('.banner').addClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.closing);
@@ -67,22 +67,22 @@
 
 		}else{
 			$('.img').removeClass('bottom');
-			this.open();
+			this.opening();
 		}	
 	};
 
-	Module.prototype.close = function(){//收合 新增Class 'closed'
-		console.log('closed');
+	Module.prototype.closing = function(){//收合 新增Class 'closed'
+		// console.log('closed');
+		
 		$('.banner').addClass(this.option.class.closed);
 		$('.banner').removeClass(this.option.class.closing);
 		$('.banner').removeClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.opened);
 		$('.img').addClass('bottom');
-		
 	};
 
-	Module.prototype.closing = function(){
-		console.log('closing');
+	Module.prototype.close = function(){
+		// console.log('closing');
 		$('.banner').addClass(this.option.class.closing);
 		$('.banner').removeClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.opened);
@@ -93,7 +93,7 @@
 			this.transition(this.option.class.opened);
 		}else{
 			$('.img').addClass('bottom');
-			this.close();
+			this.closing();
 		}
 	};
 
@@ -102,9 +102,9 @@
 	Module.prototype.toggle = function(){
 		console.log('toggle');
 		if($('.btn').text()=='展開'){
-			this.opening();
+			this.open();
 		}else{
-			this.closing();
+			this.close();
 		}
 	};
 
