@@ -13,8 +13,8 @@
 		openAtStart:'true',
 		autoToggle:'false',
 		button: {
-			closeText: '收合', 
-			openText: '展開', 
+			closeText: '鏀跺悎', 
+			openText: '灞曢枊', 
 			class: 'btn' 
 		},
 		class: {
@@ -28,46 +28,92 @@
 		},
 	};
 
-	Module.prototype.open = function(){//打開 新增Class 'opened'
+	Module.prototype.transition = function(i){
+		console.log('transition');
+		var tran = this;
+		$('.banner').on('transitionend',function(){
+			// console.log('transitionend');
+			console.log(i);
+			if(i=='closed'){
+				tran.open();
+			}else{
+				tran.close();
+			}
+		});
+	}
+
+	Module.prototype.open = function(){//鎵撻枊 鏂板Class 'opened'
 		console.log('open');
 		$('.banner').addClass(this.option.class.opened);
+		$('.banner').removeClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.closed);
-		$('.btn').text('close');
+		$('.banner').removeClass(this.option.class.closing);
 		$('.img').removeClass('bottom');
 		
+		
 	};
 
-	Module.prototype.close = function(){//收合 新增Class 'closed'
+	Module.prototype.opening=function(){
+		console.log('opening');
+		$('.img').removeClass('bottom');
+		$('.banner').addClass(this.option.class.opening);
+		$('.banner').removeClass(this.option.class.closing);
+		$('.banner').removeClass(this.option.class.closed);
+		$('.btn').text('鏀跺悎');
+		$('<style>.btn:after{ border-top:0px ;border-bottom:3px solid #666 }</style>').appendTo('head');
+		if(this.option.transition==true){
+			$('.banner').addClass('transition');
+			this.transition(this.option.class.closed);
+
+		}else{
+			$('.img').removeClass('bottom');
+			this.open();
+		}	
+	};
+
+	Module.prototype.close = function(){//鏀跺悎 鏂板Class 'closed'
 		console.log('closed');
 		$('.banner').addClass(this.option.class.closed);
+		$('.banner').removeClass(this.option.class.closing);
+		$('.banner').removeClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.opened);
-		$('.btn').text('open');
 		$('.img').addClass('bottom');
-		
 		
 	};
 
-	Module.prototype.toggle = function(){
-		console.log('toggle');
-		if($('.btn').text()=='open'){
-			this.open();
+	Module.prototype.closing = function(){
+		console.log('closing');
+		$('.banner').addClass(this.option.class.closing);
+		$('.banner').removeClass(this.option.class.opening);
+		$('.banner').removeClass(this.option.class.opened);
+		$('.btn').text('灞曢枊');
+		$('<style>.btn:after{ border-top: 3px solid #666;border-bottom: 0px}</style>').appendTo('head');
+		if(this.option.transition==true){
+			$('.banner').addClass('transition');
+			this.transition(this.option.class.opened);
 		}else{
+			$('.img').addClass('bottom');
 			this.close();
 		}
 	};
 
-	Module.prototype.transition = function(){
-		console.log('transition');
-		$('.banner').addClass('transition');
 
-	}
+
+	Module.prototype.toggle = function(){
+		console.log('toggle');
+		if($('.btn').text()=='灞曢枊'){
+			this.opening();
+		}else{
+			this.closing();
+		}
+	};
 
 	Module.prototype.init = function(module){
 		if(this.option.openAtStart == true){  
-			$('.banner').append('<button class="btn">close</button');
+			$('.banner').append('<button class="btn">鏀跺悎</button>');
 			$('.banner').addClass(this.option.class.opened);
 		}else{
-			$('.banner').append('<button class="btn">open</button');
+			$('.banner').append('<button class="btn">灞曢枊</div></button>');
 			$('.banner').addClass(this.option.class.closed);
 		}
 		var a = this;
@@ -76,10 +122,6 @@
 				a.toggle();
 			}
 		});
-		if(this.option.transition == true){
-			this.transition();
-		}
-		
 	};
 
 
@@ -90,7 +132,7 @@
 			var module = $this.data(ModuleName);
 			var opts = null;
 			if(!!module){
-				if(typeof mtthods ==='string' && typeof options === 'undefined'){
+				if(typeof methods ==='string' && typeof options === 'undefined'){
 					module[methods]();
 				}else if(typeof methods === 'string' && (typeof options ==='object' || typeof options ==='function')){
 					module[methods](options);
@@ -115,26 +157,26 @@
 
 
 // $('.banner').banner({
-// 	// 設定一開始是否為開或合
+// 	// 瑷畾涓�闁嬪鏄惁鐐洪枊鎴栧悎
 // 	openAtStart: true, // [boolean] true | false
-// 	// 設定啟動後是否要自動開或合，若設為false，就不要自勳開合；若為true是馬上自動開合；若為數字是幾毫秒之後開合
+// 	// 瑷畾鍟熷嫊寰屾槸鍚﹁鑷嫊闁嬫垨鍚堬紝鑻ヨō鐐篺alse锛屽氨涓嶈鑷嫵闁嬪悎锛涜嫢鐐簍rue鏄Μ涓婅嚜鍕曢枊鍚堬紱鑻ョ偤鏁稿瓧鏄咕姣涔嬪緦闁嬪悎
 // 	autoToggle: true, // [boolean|number] true | false | 3000
-// 	// 設定收合展開按鈕
+// 	// 瑷畾鏀跺悎灞曢枊鎸夐垥
 // 	button: {
-// 		closeText: '收合', // [string]
-// 		openText: '展開', // [string]
+// 		closeText: '鏀跺悎', // [string]
+// 		openText: '灞曢枊', // [string]
 // 		class: 'btn' // [string]
 // 	},
-// 	// 設定模組在各狀態時的class
+// 	// 瑷畾妯＄祫鍦ㄥ悇鐙�鎱嬫檪鐨刢lass
 // 	class: {
 // 		closed: 'closed', // [string]
 // 		closing: 'closing', // [string]
 // 		opened: 'opened', // [string]
 // 		opening: 'opening' // [string]
 // 	},
-// 	// 是否要有transition效果
+// 	// 鏄惁瑕佹湁transition鏁堟灉
 // 	transition: true,
-// 	// 當有transition時，要執行的callback function
+// 	// 鐣舵湁transition鏅傦紝瑕佸煼琛岀殑callback function
 // 	whenTransition: function() {
 // 		console.log('whenTransition');
 // 	}
