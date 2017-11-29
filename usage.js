@@ -59,7 +59,9 @@
 		$('.banner').addClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.closing);
 		$('.banner').removeClass(this.option.class.closed);
-		$('.btn').text('收合');
+		var closeText = this.option.button.closeText;
+
+		$('.btn').text(closeText);
 		$('<style>.btn:after{ border-top:0px ;border-bottom:3px solid #666 }</style>').appendTo('head');
 		if(this.option.transition==true){
 			$('.banner').addClass('transition');
@@ -86,7 +88,8 @@
 		$('.banner').addClass(this.option.class.closing);
 		$('.banner').removeClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.opened);
-		$('.btn').text('展開');
+		var openText = this.option.button.openText;
+		$('.btn').text(openText);
 		$('<style>.btn:after{ border-top: 3px solid #666;border-bottom: 0px}</style>').appendTo('head');
 		if(this.option.transition==true){
 			$('.banner').addClass('transition');
@@ -101,7 +104,8 @@
 
 	Module.prototype.toggle = function(){
 		console.log('toggle');
-		if($('.btn').text()=='展開'){
+		var openText = this.option.button.openText;
+		if($('.btn').text()==openText){
 			this.open();
 		}else{
 			this.close();
@@ -109,15 +113,34 @@
 	};
 
 	Module.prototype.init = function(module){
-		if(this.option.openAtStart == true){  
-			$('.banner').append('<button class="btn">收合</button>');
+		var closeText = this.option.button.closeText;
+		var openText = this.option.button.openText;
+		var btn = this.option.button.class;
+		if(this.option.openAtStart == true){ 
+			
+			$('.banner').append('<button class='+btn+'>'+closeText+'</button>');
+			$('.hi').css({
+				"position":"absolute"
+				// bottom: '0',
+				// right: '0',
+				// backgroundColor: '#000',
+				// border: '0',
+				// borderRadius: '3px 0 0 0',
+				// color:'#666',
+				// cursor: 'pointer',
+				// padding: '4px 10px 4px 8px',
+				// boxSizing: 'border-box',
+				// fontSize:'10px'
+			});
 			$('.banner').addClass(this.option.class.opened);
 		}else{
-			$('.banner').append('<button class="btn">展開</div></button>');
+			$('.banner').append('<button class='+btn+'>'+openText+'</div></button>');
 			$('.banner').addClass(this.option.class.closed);
+			$('.img').addClass('bottom');
 		}
 		var a = this;
-		$('.btn').click(function(module){ 
+		var btn = this.option.button.class;
+		$('.'+btn).click(function(module){ 
 			if(a.option.autoToggle == true){
 				a.toggle();
 			}
