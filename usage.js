@@ -25,14 +25,15 @@
 		},
 		whenTransition: function() {
 			console.log('whenTransition');
-		},
+		}
 	};
 
 	Module.prototype.transition = function(i){
-		// console.log('transition');
+		$('.banner').addClass('transition');
+		console.log('transition');
 		var tran = this;
 		$('.banner').on('transitionend',function(){
-			// console.log('transitionend');
+			console.log('transitionend');
 			// console.log(i);
 			if(i=='closed'){
 				tran.opening();
@@ -60,13 +61,26 @@
 		$('.banner').removeClass(this.option.class.closing);
 		$('.banner').removeClass(this.option.class.closed);
 		var closeText = this.option.button.closeText;
-
-		$('.btn').text(closeText);
-		$('<style>.btn:after{ border-top:0px ;border-bottom:3px solid #666 }</style>').appendTo('head');
+		var btn = this.option.button.class;
+		// $('.'+btn).text(closeText);
+		$('.'+btn).html(closeText+'<div class="tri"></div>');
+		if($('.'+btn).text()==closeText){
+			$('.tri').css({
+				"border-top": "0px",
+				"border-bottom": "3px solid #A3A4A3"
+			});
+			$('.'+btn).mouseover(function(){
+				$('.tri').css("border-top","0px");
+				$('.tri').css("border-bottom","3px solid #fff");
+			});
+			$('.'+btn).mouseout(function(){
+				$('.tri').css("border-top","0px");
+				$('.tri').css("border-bottom","3px solid #A3A4A3");
+			});
+		}
 		if(this.option.transition==true){
-			$('.banner').addClass('transition');
-			this.transition(this.option.class.closed);
-
+			// this.transition(this.option.class.closed);
+			this.transition(this.option.class.closed,this.option.whenTransition());
 		}else{
 			$('.img').removeClass('bottom');
 			this.opening();
@@ -89,11 +103,26 @@
 		$('.banner').removeClass(this.option.class.opening);
 		$('.banner').removeClass(this.option.class.opened);
 		var openText = this.option.button.openText;
-		$('.btn').text(openText);
-		$('<style>.btn:after{ border-top: 3px solid #666;border-bottom: 0px}</style>').appendTo('head');
+		var btn = this.option.button.class;
+		// $('.'+btn).text(openText);
+		$('.'+btn).html(openText+'<div class="tri"></div>');
+		if($('.'+btn).text()==openText){
+			$('.tri').css({
+				"border-top": "3px solid #A3A4A3",
+				"border-bottom": "0px"
+			});
+			$('.'+btn).mouseover(function(){
+				$('.tri').css("border-top","3px solid #fff");
+				$('.tri').css("border-bottom","0px");
+			});
+			$('.'+btn).mouseout(function(){
+				$('.tri').css("border-top","3px solid #A3A4A3");
+				$('.tri').css("border-bottom","0px");
+			});
+		}
 		if(this.option.transition==true){
-			$('.banner').addClass('transition');
-			this.transition(this.option.class.opened);
+			// this.transition(this.option.class.opened);
+			this.transition(this.option.class.opened,this.option.whenTransition());
 		}else{
 			$('.img').addClass('bottom');
 			this.closing();
@@ -105,45 +134,56 @@
 	Module.prototype.toggle = function(){
 		console.log('toggle');
 		var openText = this.option.button.openText;
-		if($('.btn').text()==openText){
+		var btn = this.option.button.class;
+		if($('.'+btn).text()==openText){
 			this.open();
 		}else{
 			this.close();
 		}
 	};
 
+	Module.prototype.delay = function(e){
+		console.log('delay');
+		var delay = this;
+		setTimeout(function(e){
+			delay.toggle();
+		},e);
+	}
+
 	Module.prototype.init = function(module){
 		var closeText = this.option.button.closeText;
 		var openText = this.option.button.openText;
 		var btn = this.option.button.class;
 		if(this.option.openAtStart == true){ 
-			
 			$('.banner').append('<button class='+btn+'>'+closeText+'</button>');
-			$('.hi').css({
-				"position":"absolute"
-				// bottom: '0',
-				// right: '0',
-				// backgroundColor: '#000',
-				// border: '0',
-				// borderRadius: '3px 0 0 0',
-				// color:'#666',
-				// cursor: 'pointer',
-				// padding: '4px 10px 4px 8px',
-				// boxSizing: 'border-box',
-				// fontSize:'10px'
-			});
+			$('<div class="tri"></div>').appendTo('.'+btn);
 			$('.banner').addClass(this.option.class.opened);
 		}else{
 			$('.banner').append('<button class='+btn+'>'+openText+'</div></button>');
+			$('<div class="tri"></div>').appendTo('.'+btn);
 			$('.banner').addClass(this.option.class.closed);
 			$('.img').addClass('bottom');
+
 		}
+		$('.'+btn).addClass('btn');
 		var a = this;
 		var btn = this.option.button.class;
 		$('.'+btn).click(function(module){ 
 			if(a.option.autoToggle == true){
 				a.toggle();
+			}else if(typeof a.option.autoToggle === 'number'){
+				a.delay(a.option.autoToggle);
+			}else{
+				console.log('noToggle');
 			}
+		});
+		$('.'+btn).mouseover(function(){
+			$('.btn').css("color","#fff");
+			$('.tri').css("border-bottom","3px solid #fff");
+		});
+		$('.'+btn).mouseout(function(){
+			$('.btn').css("color","#A3A4A3");
+			$('.tri').css("border-bottom","3px solid #A3A4A3");
 		});
 	};
 
